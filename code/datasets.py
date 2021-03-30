@@ -30,7 +30,6 @@ class TemporalDataset(Dataset):
 
     def __getitem__(self, idx):
         file_name = self.file_name_list[idx]
-        print(file_name)
 
         visual_feature = np.load(self.visual_features[file_name])
         acoustic_feature = np.load(self.acoustic_features[file_name])

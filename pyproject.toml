@@ -16,6 +16,7 @@ SpeechRecognition = "^3.8.1"
 torch = "^1.7.1"
 torchvision = "^0.8.2"
 torchaudio = "^0.7.2"
+sklearn = "^0.0"
 
 [tool.poetry.dev-dependencies]
 

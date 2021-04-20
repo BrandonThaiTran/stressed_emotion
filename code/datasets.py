@@ -30,7 +30,7 @@ class TemporalDataset(Dataset):
 
     def __getitem__(self, idx):
         file_name = self.file_name_list[idx]
-
+        
         visual_feature = np.load(self.visual_features[file_name])
         acoustic_feature = np.load(self.acoustic_features[file_name])
         lexical_feature = np.load(self.lexical_features[file_name])
@@ -39,7 +39,15 @@ class TemporalDataset(Dataset):
         v_label = self.v_labels[file_name]
         a_label = self.a_labels[file_name]
         d_label = self.d_labels[file_name]
-
+        
+        # Spontaneity label
+        if file_name[7] == 's':
+            s_label = 1
+        elif file_name[7] == 'i':
+            s_label = 0
+        else:
+            raise ValueError('Invalid spontaneity label')
+        
         speaker = self.speakers[file_name]
 
         return (
@@ -50,7 +58,8 @@ class TemporalDataset(Dataset):
             v_label,
             a_label,
             d_label,
-            speaker,
+            s_label,
+            speaker
         )
 
     def __len__(self):
@@ -83,7 +92,8 @@ def collate_fn_temporal_dataset(data):
         v_labels,
         a_labels,
         d_labels,
-        speakers,
+        s_labels,
+        speakers
     ) = zip(*data)
 
     visual_features, visual_lengths = padding(visual_features_tmp)
@@ -95,7 +105,8 @@ def collate_fn_temporal_dataset(data):
     v_labels = torch.LongTensor(v_labels)
     a_labels = torch.LongTensor(a_labels)
     d_labels = torch.LongTensor(d_labels)
-
+    s_labels = torch.LongTensor(s_labels)
+    
     return (
         visual_features,
         visual_lengths,
@@ -106,7 +117,8 @@ def collate_fn_temporal_dataset(data):
         v_labels,
         a_labels,
         d_labels,
-        speakers,
+        s_labels, 
+        speakers
     )
 
 
